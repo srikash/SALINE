@@ -57,9 +57,9 @@ it (SynthSeg) before finding the electrode track — all via Docker, pulling
 
 **Output:**
 
-* `subject_saline_elec.nii.gz`: the electrode segmentation, in `--input`'s native space.
+* `subject_saline_elecSeg.nii.gz`: the electrode segmentation, in `--input`'s native space.
 * `subject_1mm_iso.nii.gz`: the resampled MRI, kept for reference.
-* `subject_1mm_iso_saline_elec.nii.gz`: the electrode segmentation, in 1mm-isotropic space.
+* `subject_1mm_iso_saline_elecSeg.nii.gz`: the electrode segmentation, in 1mm-isotropic space.
 
 **Running without Docker:**
 

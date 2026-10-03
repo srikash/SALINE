@@ -107,9 +107,9 @@ def _run(num_regions, input_path, brain_mask_override, synthseg_override, thread
             return
 
         on_stage("Resampling result back to native space")
-        iso_result_path = f"{paths['base']}_1mm_iso_saline_elec.nii.gz"
+        iso_result_path = f"{paths['base']}_1mm_iso_saline_elecSeg.nii.gz"
         nib.save(nib.Nifti1Image(result, img.affine, img.header), iso_result_path)
-        native_result_path = f"{paths['base']}_saline_elec.nii.gz"
+        native_result_path = f"{paths['base']}_saline_elecSeg.nii.gz"
         external.resample_to_native(iso_result_path, native_result_path, paths["native_shape"])
 
     console.print(f"[green]✓ SALINE done[/green] — [cyan]{nname}[/cyan]")
