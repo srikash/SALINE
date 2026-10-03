@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,8 +7,35 @@ name = "saline-dbs"
 version = "0.3.0"
 description = "SALINE: filter-based localization and segmentation of DBS electrodes in clinical MRI"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
+authors = [
+    { name = "Vanessa H. Yu" },
+    { name = "Edward Chen" },
+    { name = "Jürgen Germann" },
+    { name = "Alexandre Boutet" },
+    { name = "Andres M. Lozano" },
+    { name = "Kâmil Uludağ" },
+    { name = "Sriranga Kashyap" },
+]
+keywords = [
+    "deep brain stimulation",
+    "dbs",
+    "electrode segmentation",
+    "mri",
+    "neuroimaging",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
 dependencies = [
     "numpy",
     "nibabel",
@@ -19,6 +46,12 @@ dependencies = [
     "rich",
     "tqdm",
 ]
+
+[project.urls]
+Homepage = "https://github.com/srikash/SALINE"
+Repository = "https://github.com/srikash/SALINE"
+Issues = "https://github.com/srikash/SALINE/issues"
+Paper = "https://doi.org/10.1109/ISBI61048.2026.11515562"
 
 [project.scripts]
 saline = "saline.cli:main"

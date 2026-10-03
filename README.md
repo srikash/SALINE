@@ -86,3 +86,13 @@ isn't available — there's no equivalent precomputed-file option for those.
 
 If you use this in your work, please cite the paper above — see [`CITATION.cff`](CITATION.cff)
 for the full machine-readable record.
+
+## Releasing
+
+Publishing a GitHub Release triggers `.github/workflows/release.yml`, which
+builds the package and publishes it to PyPI via
+[trusted publishing](https://docs.pypi.org/trusted-publishers/) (no API token
+stored in the repo). One-time setup on PyPI, before the first release:
+add a trusted publisher on the `saline-dbs` project (or as a pending
+publisher if the project doesn't exist yet) pointing at this repository,
+workflow `release.yml`, environment `pypi`.
