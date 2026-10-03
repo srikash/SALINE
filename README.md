@@ -3,19 +3,19 @@
 
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
-Give SALINE a raw clinical T1-weighted MR image and it handles the rest: resampling, 
-skull-stripping (SynthStrip), bias correction (N4), and segmentation (SynthSeg) 
-all run via Docker, with nothing beyond Docker to install. It runs as a fully standalone CLI tool.
+Give SALINE a raw clinical T1-weighted MR image and it handles the rest end
+to end, via Docker, with nothing beyond Docker to install. It runs as a
+fully standalone CLI tool.
 
 It is the core of [DBS-ElecNet](https://github.com/BRAIN-TO/DBS-ElecNet)'s 
-classical (non-deep-learning) segmentation pipeline.
+classical (non-deep-learning) segmentation pipeline. See the paper above
+for how it works.
 
 ## Why SALINE?
 
 SALINE is a classical, filtering-based automatic segmentation method for DBS
-electrodes: no training, no manual annotation, no GPU. Give it an MRI, a brain
-mask, and a SynthSeg segmentation, and it finds the electrode track with a
-Laplacian/Frangi filter cascade and a line fit.
+electrodes: no training, no manual annotation, no GPU. See the paper above
+for how the pipeline works.
 
 That makes it well suited to building a large database of electrode
 segmentations, at scale, without a human labeling each scan by hand. In the
@@ -30,15 +30,29 @@ SALINE is two separate things: the Python package, and the imaging tools
 it calls out to (SynthStrip, SynthSeg, ANTs). `pip install` only gives you
 the first. The tools are not Python dependencies and don't come with it.
 
-**1. Install the Python package**
+**1. Create an environment and install the Python package**
+
+Requires Python 3.12+.
+
+Pure Python:
 
 ```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
 pip install saline-dbs
 ```
 
-Requires Python 3.12+. This installs the `saline` CLI and its Python
-dependencies (numpy, nibabel, scipy, scikit-image, scikit-learn, click,
-rich, tqdm), nothing else yet.
+conda / mamba:
+
+```bash
+conda create -n saline python=3.12
+conda activate saline
+pip install saline-dbs
+```
+
+(substitute `mamba` for `conda` throughout if that's what you use)
+
+This installs the `saline` CLI and its Python dependencies.
 
 **2. Install Docker (recommended)**
 
@@ -59,8 +73,8 @@ If Docker isn't available:
 * SynthStrip and SynthSeg have no local fallback. Pass precomputed files
   instead: `--brain_mask PATH` and `--synthseg PATH`, already in the same
   1mm-isotropic space SALINE would otherwise resample `--input` into.
-* ANTs (resampling, N4, mask multiply) falls back to a local install:
-  `ResampleImage`, `N4BiasFieldCorrection`, and `ImageMath` on `PATH`.
+* ANTs falls back to a local install: `ResampleImage`,
+  `N4BiasFieldCorrection`, and `ImageMath` on `PATH`.
 
 ## Usage
 
@@ -76,10 +90,8 @@ Single-electrode:
 saline single --input subject.nii.gz
 ```
 
-`--input` is a raw, native-space clinical MRI. SALINE resamples it to 1mm
-isotropic, skull-strips it (SynthStrip), bias-corrects it (N4), and segments
-it (SynthSeg) before finding the electrode track. See [Install](#install)
-for what each step needs and how to run without Docker.
+`--input` is a raw, native-space clinical MRI; SALINE handles the rest.
+See [Install](#install) for what that needs and how to run without Docker.
 
 **Output:**
 
