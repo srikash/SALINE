@@ -3,13 +3,18 @@
 
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
-Give SALINE a raw clinical T1-weighted MR image and it handles the rest end
-to end, via Docker, with nothing beyond Docker to install. It runs as a
-fully standalone CLI tool.
+Give SALINE a raw clinical T1-weighted MR image and get a segmentation
+back. It runs as a fully standalone CLI tool.
 
 It is the core of [DBS-ElecNet](https://github.com/BRAIN-TO/DBS-ElecNet)'s 
-classical (non-deep-learning) segmentation pipeline. See the paper above
-for how it works.
+classical (non-deep-learning) segmentation pipeline.
+
+## Table of Contents
+
+- [Why SALINE?](#why-saline)
+- [Install](#install)
+- [Usage](#usage)
+- [Citation](#citation)
 
 ## Why SALINE?
 
@@ -17,12 +22,8 @@ SALINE is a classical, filtering-based automatic segmentation method for DBS
 electrodes: no training, no manual annotation, no GPU. See the paper above
 for how the pipeline works.
 
-That makes it well suited to building a large database of electrode
-segmentations, at scale, without a human labeling each scan by hand. In the
-DBS-ElecNet paper, SALINE segmented 280 post-operative MRI scans in about 1.5
-minutes each, and those segmentations became the training data for
-DBS-ElecNet's 3D U-Net. Any similar segmentation model can be trained the
-same way: run SALINE over a cohort, use its output as ground truth.
+That makes it well suited to building a large labeled dataset without
+manual annotation, exactly how DBS-ElecNet's own training data was produced.
 
 ## Install
 
@@ -112,11 +113,3 @@ See [Install](#install) for what that needs and how to run without Docker.
 
 If you use this in your work, please cite the paper above (see [`CITATION.cff`](CITATION.cff)
 for the full machine-readable record).
-
-## Releasing
-
-Publishing a GitHub Release triggers `.github/workflows/release.yml`, which
-builds the package and publishes it to PyPI via
-[trusted publishing](https://docs.pypi.org/trusted-publishers/) (no API token
-stored in the repo), as configured on the
-[`saline-dbs`](https://pypi.org/project/saline-dbs/) project.
