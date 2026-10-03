@@ -1,5 +1,5 @@
-# SALINE
-### <u>S</u>egmentation <u>A</u>lgorithm using <u>LIN</u>e-fitting for <u>E</u>lectrodes
+# SALINE (part of DBS-ElecNet)
+## <b><ins>S</ins></b>egmentation <b><ins>A</ins></b>lgorithm using <b><ins>LIN</ins></b>e-fitting for <b><ins>E</ins></b>lectrodes
 
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
