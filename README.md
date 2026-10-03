@@ -5,8 +5,11 @@
 
 SALINE combines a Laplacian edge filter and a Frangi vesselness filter to find
 electrode-track candidate voxels, then fits a line through them per electrode.
-It runs as a standalone CLI tool; [DBS-ElecNet](https://github.com/srikash/DBS-ElecNet)
-depends on it for its classical (non-deep-learning) segmentation pipeline.
+Give it a raw clinical MRI and it handles the rest: resampling, skull-stripping
+(SynthStrip), bias correction (N4), and segmentation (SynthSeg) all run via
+Docker, with no other install needed. It runs as a fully standalone CLI tool;
+[DBS-ElecNet](https://github.com/srikash/DBS-ElecNet) depends on it for its
+classical (non-deep-learning) segmentation pipeline.
 
 ## Why SALINE?
 
@@ -24,10 +27,11 @@ same way: run SALINE over a cohort, use its output as ground truth.
 
 ## Install
 
-Requires Python 3.12+.
+Requires Python 3.12+ and [Docker](https://www.docker.com) (recommended — see
+below for running without it).
 
 ```bash
-pip install git+https://github.com/srikash/SALINE.git@v0.2.1
+pip install git+https://github.com/srikash/SALINE.git@v0.3.0
 ```
 
 ## Usage
@@ -35,28 +39,43 @@ pip install git+https://github.com/srikash/SALINE.git@v0.2.1
 Dual-electrode (default — also available explicitly as `saline dual`):
 
 ```bash
-saline --input subject.nii.gz --br_mask subject_brain_mask.nii.gz --synthseg subject_seg.nii.gz
+saline --input subject.nii.gz
 ```
 
 Single-electrode:
 
 ```bash
-saline single --input subject.nii.gz --br_mask subject_brain_mask.nii.gz --synthseg subject_seg.nii.gz
+saline single --input subject.nii.gz
 ```
 
-**Required arguments:**
-
-* `--input`: path to the input MRI volume (NIfTI format), already resampled to
-  1mm isotropic, skull-stripped, and N4 bias-corrected.
-* `--br_mask`: path to the corresponding brain mask.
-* `--synthseg`: path to the corresponding SynthSeg segmentation.
+`--input` is a raw, native-space clinical MRI. SALINE resamples it to 1mm
+isotropic, skull-strips it (SynthStrip), bias-corrects it (N4), and segments
+it (SynthSeg) before finding the electrode track — all via Docker, pulling
+[`antsx/ants`](https://hub.docker.com/r/antsx/ants),
+[`freesurfer/synthstrip`](https://hub.docker.com/r/freesurfer/synthstrip), and
+[`cookpa/synthseg`](https://hub.docker.com/r/cookpa/synthseg) on first use.
 
 **Output:**
 
-* `subject_saline_elec.nii.gz`: the electrode segmentation, in the same space as `--input`.
+* `subject_saline_elec.nii.gz`: the electrode segmentation, in `--input`'s native space.
+* `subject_1mm_iso.nii.gz`: the resampled MRI, kept for reference.
+* `subject_1mm_iso_saline_elec.nii.gz`: the electrode segmentation, in 1mm-isotropic space.
+
+**Running without Docker:**
+
+If Docker isn't available, pass precomputed files instead — both must already
+be in the same 1mm-isotropic space as `subject_1mm_iso.nii.gz`:
+
+* `--brain_mask PATH`: skips Docker-based SynthStrip.
+* `--synthseg PATH`: skips Docker-based SynthSeg.
+
+ANTs (resampling, N4, mask multiply) falls back to a local install
+(`ResampleImage`, `N4BiasFieldCorrection`, `ImageMath` on `PATH`) if Docker
+isn't available — there's no equivalent precomputed-file option for those.
 
 **Optional arguments:**
 
+* `--threads` (default `5`): threads for SynthSeg.
 * `--laplacian_threshold` (default `0.21`)
 * `--frangi_threshold` (default `0.25`)
 * `--lower_frangi_threshold` (default `0.2`): used if the higher threshold finds no candidates.

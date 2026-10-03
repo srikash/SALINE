@@ -52,7 +52,7 @@ def _fit_regions_with_ransac_check(points_list):
 
 def segment(image, br_mask, seg, num_regions,
             laplacian_threshold, frangi_threshold, lower_frangi_threshold,
-            save_intermediate=None, on_stage=None):
+            expand_radius=6, save_intermediate=None, on_stage=None):
     """
     Segment one (num_regions=1) or two (num_regions=2, left/right split) electrode
     tracks in `image`.
@@ -63,6 +63,7 @@ def segment(image, br_mask, seg, num_regions,
         num_regions: 1 for single-electrode mode, 2 for dual-electrode mode.
         laplacian_threshold, frangi_threshold, lower_frangi_threshold: detection
             thresholds (see `detect.detect_candidates`).
+        expand_radius: dilation radius (voxels) applied to the final line mask.
         save_intermediate: optional `callback(name, mask)` invoked with each
             intermediate mask that's worth persisting, so this function stays
             array-in/array-out and callers decide whether/how to save to disk.
@@ -118,4 +119,4 @@ def segment(image, br_mask, seg, num_regions,
         fits = _fit_regions_with_ransac_check(points)
 
     on_stage("Drawing segmentation mask")
-    return draw_lines(ends, image.shape, fits, br_mask)
+    return draw_lines(ends, image.shape, fits, br_mask, radius=expand_radius)

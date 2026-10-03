@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "saline-dbs"
-version = "0.2.1"
+version = "0.3.0"
 description = "SALINE: filter-based localization and segmentation of DBS electrodes in clinical MRI"
 readme = "README.md"
 license = { file = "LICENSE" }
