@@ -10,23 +10,21 @@ depends on it for its classical (non-deep-learning) segmentation pipeline.
 
 ## Why SALINE?
 
-Expert-annotated DBS electrode segmentations are scarce and expensive: manual
-segmentation took 3-5 minutes per scan, and specialized DBS MRI datasets with
-ground truth are nearly unavailable. SALINE exists to remove that bottleneck —
-it segments a scan in about 1.5 minutes, with no manual input, which makes it
-practical to run over an entire cohort rather than a handful of hand-labeled
-examples.
+Expert-annotated DBS electrode segmentations are scarce and expensive. Manual
+segmentation takes 3-5 minutes per scan, and there's basically no specialized
+DBS MRI dataset with ground truth to start from. SALINE sidesteps that: it
+segments a scan in about 1.5 minutes with no manual input, so you can run it
+over an entire cohort instead of hand-labeling a few dozen scans.
 
-That's exactly how it was used in the DBS-ElecNet paper: SALINE was run over
-280 post-operative MRI scans to generate electrode masks, 258 of which (211
-train, 7 validation, 40 test) became the training data for DBS-ElecNet's 3D
-U-Net — no manual annotation involved anywhere in the loop. DBS-ElecNet then
-goes on to outperform SALINE itself, including on scans where SALINE's
-filter-based approach struggles (e.g. low-contrast regions near the
-ventricles, or separating bilateral electrodes under certain head
-orientations) — 22 of the 280 scans were excluded from training for exactly
-this reason. SALINE's role is to bootstrap that training set, not to be the
-final word on any individual scan.
+That's literally how it was used in the DBS-ElecNet paper. SALINE ran over
+280 post-operative MRI scans, and 258 of the resulting masks (211 train, 7
+validation, 40 test) became DBS-ElecNet's training data, no manual annotation
+anywhere in the pipeline. DBS-ElecNet ends up beating SALINE on exactly the
+cases where the filter-based approach struggles: low-contrast regions near
+the ventricles, bilateral electrodes that are hard to separate depending on
+head orientation. Those are roughly the 22 scans that got excluded from
+training. SALINE's job is to bootstrap the training set, not to nail every
+scan on its own.
 
 ## Install
 
