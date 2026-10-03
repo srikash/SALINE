@@ -30,7 +30,7 @@ def detect_candidates(image, br_mask, csf, laplacian_threshold, frangi_threshold
     thresholded_img = thresholded_pos | thresholded_neg
     thresholded_img = thresholded_img.astype(np.uint8) * brain_mask.astype(np.uint8)
     thresholded_img = morphology.isotropic_closing(thresholded_img, radius=3)
-    thresholded_img = morphology.remove_small_objects(thresholded_img, 5)
+    thresholded_img = morphology.remove_small_objects(thresholded_img, max_size=4)
     thresholded_img = morphology.isotropic_dilation(thresholded_img, radius=2)
     lap = thresholded_img * csf
 
@@ -43,7 +43,7 @@ def detect_candidates(image, br_mask, csf, laplacian_threshold, frangi_threshold
 
     thresholded_image = normalized_frangi > frangi_threshold
     thresholded_image = morphology.isotropic_closing(thresholded_image, radius=3)
-    thresholded_image = morphology.remove_small_objects(thresholded_image, 5)
+    thresholded_image = morphology.remove_small_objects(thresholded_image, max_size=4)
     thresholded_image = morphology.isotropic_closing(thresholded_image, radius=8)
     thresholded_image = morphology.isotropic_dilation(thresholded_image, radius=2)
     frangi_img = thresholded_image * csf

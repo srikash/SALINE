@@ -52,7 +52,7 @@ def _fit_regions_with_ransac_check(points_list):
 
 def segment(image, br_mask, seg, num_regions,
             laplacian_threshold, frangi_threshold, lower_frangi_threshold,
-            save_intermediate=None):
+            save_intermediate=None, on_stage=None):
     """
     Segment one (num_regions=1) or two (num_regions=2, left/right split) electrode
     tracks in `image`.
@@ -66,11 +66,17 @@ def segment(image, br_mask, seg, num_regions,
         save_intermediate: optional `callback(name, mask)` invoked with each
             intermediate mask that's worth persisting, so this function stays
             array-in/array-out and callers decide whether/how to save to disk.
+        on_stage: optional `callback(message: str)` invoked as processing enters
+            each named stage, so callers can drive their own progress display
+            (e.g. a progress bar) without this function knowing it exists.
 
     Returns:
         A binary mask (np.ndarray) covering the detected electrode track(s), or
         None if no candidate voxels could be found even after both fallbacks.
     """
+    on_stage = on_stage or (lambda message: None)
+
+    on_stage("Computing CSF mask")
     csf = np.ones(seg.shape, dtype=bool)
     for label in CSF_EXCLUDED_LABELS:
         csf &= (seg != label)
@@ -78,6 +84,7 @@ def segment(image, br_mask, seg, num_regions,
 
     ends = _electrode_ends(seg, num_regions)
 
+    on_stage("Detecting candidate voxels (Laplacian + Frangi)")
     combined, lap, normalized_frangi = detect_candidates(
         image, br_mask, csf, laplacian_threshold, frangi_threshold)
 
@@ -88,24 +95,27 @@ def segment(image, br_mask, seg, num_regions,
     points = _region_points(combined, num_regions)
 
     if _regions_have_spread(points, axis=2, min_spread=10):
+        on_stage("Fitting line(s)")
         fits = [fit_best_fit_line(pts) for pts in points]
     else:
-        print("ah oh, frangi only now. Lowering threshold...")
+        on_stage("Lowering Frangi threshold")
         frangi_img = normalized_frangi > lower_frangi_threshold
         frangi_img = frangi_img * csf
         frangi_img = morphology.isotropic_closing(frangi_img, radius=3)
-        frangi_img = morphology.remove_small_objects(frangi_img, 5)
+        frangi_img = morphology.remove_small_objects(frangi_img, max_size=4)
         if save_intermediate:
             save_intermediate("frangi", frangi_img)
         points = _region_points(frangi_img, num_regions)
 
         if any(pts.shape[0] == 0 for pts in points):
-            print("ah oh, frangi only didn't work. Trying laplacian only...")
+            on_stage("Falling back to Laplacian-only mask")
             points = _region_points(lap, num_regions)
             if any(pts.shape[0] == 0 for pts in points):
-                print("OH NO, laplacian only still didn't work... SKIP")
+                on_stage("No candidate voxels found — skipping")
                 return None
 
+        on_stage("Fitting line(s) (fallback)")
         fits = _fit_regions_with_ransac_check(points)
 
+    on_stage("Drawing segmentation mask")
     return draw_lines(ends, image.shape, fits, br_mask)

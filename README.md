@@ -8,13 +8,15 @@ depends on it for its classical (non-deep-learning) segmentation pipeline.
 
 ## Install
 
+Requires Python 3.12+.
+
 ```bash
-pip install git+https://github.com/srikash/SALINE.git@v0.1.0
+pip install git+https://github.com/srikash/SALINE.git@v0.2.0
 ```
 
 ## Usage
 
-Dual-electrode (default):
+Dual-electrode (default — also available explicitly as `saline dual`):
 
 ```bash
 saline --input subject.nii.gz --br_mask subject_brain_mask.nii.gz --synthseg subject_seg.nii.gz
