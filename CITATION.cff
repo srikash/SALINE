@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the following paper."
+title: SALINE
+authors:
+  - family-names: Yu
+    given-names: Vanessa H.
+  - family-names: Chen
+    given-names: Edward
+  - family-names: Germann
+    given-names: Jürgen
+  - family-names: Boutet
+    given-names: Alexandre
+  - family-names: Lozano
+    given-names: Andres M.
+  - family-names: Uludağ
+    given-names: Kâmil
+  - family-names: Kashyap
+    given-names: Sriranga
+preferred-citation:
+  type: conference-paper
+  title: "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI"
+  authors:
+    - family-names: Yu
+      given-names: Vanessa H.
+    - family-names: Chen
+      given-names: Edward
+    - family-names: Germann
+      given-names: Jürgen
+    - family-names: Boutet
+      given-names: Alexandre
+    - family-names: Lozano
+      given-names: Andres M.
+    - family-names: Uludağ
+      given-names: Kâmil
+    - family-names: Kashyap
+      given-names: Sriranga
+  conference:
+    name: "2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI)"
+    city: London
+    country: GB
+  collection-title: "2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI)"
+  year: 2026
+  start: 1
+  end: 4
+  doi: "10.1109/ISBI61048.2026.11515562"
