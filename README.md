@@ -26,7 +26,7 @@ same way: run SALINE over a cohort, use its output as ground truth.
 
 ## Install
 
-Requires Python 3.12+ and [Docker](https://www.docker.com) (recommended — see
+Requires Python 3.12+ and [Docker](https://www.docker.com) (recommended; see
 below for running without it).
 
 ```bash
@@ -35,7 +35,7 @@ pip install git+https://github.com/srikash/SALINE.git@v0.3.0
 
 ## Usage
 
-Dual-electrode (default — also available explicitly as `saline dual`):
+Dual-electrode (default, also available explicitly as `saline dual`):
 
 ```bash
 saline --input subject.nii.gz
@@ -49,8 +49,8 @@ saline single --input subject.nii.gz
 
 `--input` is a raw, native-space clinical MRI. SALINE resamples it to 1mm
 isotropic, skull-strips it (SynthStrip), bias-corrects it (N4), and segments
-it (SynthSeg) before finding the electrode track — all via Docker, pulling
-[`antsx/ants`](https://hub.docker.com/r/antsx/ants),
+it (SynthSeg) before finding the electrode track. All of this runs via
+Docker, pulling [`antsx/ants`](https://hub.docker.com/r/antsx/ants),
 [`freesurfer/synthstrip`](https://hub.docker.com/r/freesurfer/synthstrip), and
 [`cookpa/synthseg`](https://hub.docker.com/r/cookpa/synthseg) on first use.
 
@@ -62,7 +62,7 @@ it (SynthSeg) before finding the electrode track — all via Docker, pulling
 
 **Running without Docker:**
 
-If Docker isn't available, pass precomputed files instead — both must already
+If Docker isn't available, pass precomputed files instead. Both must already
 be in the same 1mm-isotropic space as `subject_1mm_iso.nii.gz`:
 
 * `--brain_mask PATH`: skips Docker-based SynthStrip.
@@ -70,7 +70,7 @@ be in the same 1mm-isotropic space as `subject_1mm_iso.nii.gz`:
 
 ANTs (resampling, N4, mask multiply) falls back to a local install
 (`ResampleImage`, `N4BiasFieldCorrection`, `ImageMath` on `PATH`) if Docker
-isn't available — there's no equivalent precomputed-file option for those.
+isn't available. There's no equivalent precomputed-file option for those.
 
 **Optional arguments:**
 
@@ -83,8 +83,8 @@ isn't available — there's no equivalent precomputed-file option for those.
 
 ## Citation
 
-If you use this in your work, please cite the paper above — see [`CITATION.cff`](CITATION.cff)
-for the full machine-readable record.
+If you use this in your work, please cite the paper above (see [`CITATION.cff`](CITATION.cff)
+for the full machine-readable record).
 
 ## Releasing
 
