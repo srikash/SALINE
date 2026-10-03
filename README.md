@@ -1,5 +1,5 @@
 # SALINE
-### Filter-based localization and segmentation of DBS electrodes in clinical MRI
+### Segmentation Algorithm using LINe-fitting for Electrodes
 
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
@@ -7,6 +7,26 @@ SALINE combines a Laplacian edge filter and a Frangi vesselness filter to find
 electrode-track candidate voxels, then fits a line through them per electrode.
 It runs as a standalone CLI tool; [DBS-ElecNet](https://github.com/srikash/DBS-ElecNet)
 depends on it for its classical (non-deep-learning) segmentation pipeline.
+
+## Why SALINE?
+
+Expert-annotated DBS electrode segmentations are scarce and expensive: manual
+segmentation took 3-5 minutes per scan, and specialized DBS MRI datasets with
+ground truth are nearly unavailable. SALINE exists to remove that bottleneck —
+it segments a scan in about 1.5 minutes, with no manual input, which makes it
+practical to run over an entire cohort rather than a handful of hand-labeled
+examples.
+
+That's exactly how it was used in the DBS-ElecNet paper: SALINE was run over
+280 post-operative MRI scans to generate electrode masks, 258 of which (211
+train, 7 validation, 40 test) became the training data for DBS-ElecNet's 3D
+U-Net — no manual annotation involved anywhere in the loop. DBS-ElecNet then
+goes on to outperform SALINE itself, including on scans where SALINE's
+filter-based approach struggles (e.g. low-contrast regions near the
+ventricles, or separating bilateral electrodes under certain head
+orientations) — 22 of the 280 scans were excluded from training for exactly
+this reason. SALINE's role is to bootstrap that training set, not to be the
+final word on any individual scan.
 
 ## Install
 
