@@ -5,7 +5,7 @@
 
 Give SALINE a raw clinical T1-weighted MR image and it handles the rest: resampling, 
 skull-stripping (SynthStrip), bias correction (N4), and segmentation (SynthSeg) 
-all run via Docker, with no other install needed. It runs as a fully standalone CLI tool.
+all run via Docker, with nothing beyond Docker to install. It runs as a fully standalone CLI tool.
 
 It is the core of [DBS-ElecNet](https://github.com/BRAIN-TO/DBS-ElecNet)'s 
 classical (non-deep-learning) segmentation pipeline.
@@ -26,12 +26,41 @@ same way: run SALINE over a cohort, use its output as ground truth.
 
 ## Install
 
-Requires Python 3.12+ and [Docker](https://www.docker.com) (recommended; see
-below for running without it).
+SALINE is two separate things: the Python package, and the imaging tools
+it calls out to (SynthStrip, SynthSeg, ANTs). `pip install` only gives you
+the first. The tools are not Python dependencies and don't come with it.
+
+**1. Install the Python package**
 
 ```bash
 pip install saline-dbs
 ```
+
+Requires Python 3.12+. This installs the `saline` CLI and its Python
+dependencies (numpy, nibabel, scipy, scikit-image, scikit-learn, click,
+rich, tqdm), nothing else yet.
+
+**2. Install Docker (recommended)**
+
+Install [Docker](https://www.docker.com) and make sure it's running.
+SALINE pulls the images it needs automatically the first time it runs.
+There's nothing to install yourself beyond Docker itself:
+
+* [`freesurfer/synthstrip`](https://hub.docker.com/r/freesurfer/synthstrip)
+* [`cookpa/synthseg`](https://hub.docker.com/r/cookpa/synthseg)
+* [`antsx/ants`](https://hub.docker.com/r/antsx/ants)
+
+With Docker running, `saline --input subject.nii.gz` works end to end.
+
+**Running without Docker**
+
+If Docker isn't available:
+
+* SynthStrip and SynthSeg have no local fallback. Pass precomputed files
+  instead: `--brain_mask PATH` and `--synthseg PATH`, already in the same
+  1mm-isotropic space SALINE would otherwise resample `--input` into.
+* ANTs (resampling, N4, mask multiply) falls back to a local install:
+  `ResampleImage`, `N4BiasFieldCorrection`, and `ImageMath` on `PATH`.
 
 ## Usage
 
@@ -49,28 +78,14 @@ saline single --input subject.nii.gz
 
 `--input` is a raw, native-space clinical MRI. SALINE resamples it to 1mm
 isotropic, skull-strips it (SynthStrip), bias-corrects it (N4), and segments
-it (SynthSeg) before finding the electrode track. All of this runs via
-Docker, pulling [`antsx/ants`](https://hub.docker.com/r/antsx/ants),
-[`freesurfer/synthstrip`](https://hub.docker.com/r/freesurfer/synthstrip), and
-[`cookpa/synthseg`](https://hub.docker.com/r/cookpa/synthseg) on first use.
+it (SynthSeg) before finding the electrode track. See [Install](#install)
+for what each step needs and how to run without Docker.
 
 **Output:**
 
 * `subject_saline_elecSeg.nii.gz`: the electrode segmentation, in `--input`'s native space.
 * `subject_1mm_iso.nii.gz`: the resampled MRI, kept for reference.
 * `subject_1mm_iso_saline_elecSeg.nii.gz`: the electrode segmentation, in 1mm-isotropic space.
-
-**Running without Docker:**
-
-If Docker isn't available, pass precomputed files instead. Both must already
-be in the same 1mm-isotropic space as `subject_1mm_iso.nii.gz`:
-
-* `--brain_mask PATH`: skips Docker-based SynthStrip.
-* `--synthseg PATH`: skips Docker-based SynthSeg.
-
-ANTs (resampling, N4, mask multiply) falls back to a local install
-(`ResampleImage`, `N4BiasFieldCorrection`, `ImageMath` on `PATH`) if Docker
-isn't available. There's no equivalent precomputed-file option for those.
 
 **Optional arguments:**
 
