@@ -3,12 +3,11 @@
 
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
-SALINE combines a Laplacian edge filter and a Frangi vesselness filter to find
-electrode-track candidate voxels, then fits a line through them per electrode.
-Give it a raw clinical MRI and it handles the rest: resampling, skull-stripping
-(SynthStrip), bias correction (N4), and segmentation (SynthSeg) all run via
-Docker, with no other install needed. It runs as a fully standalone CLI tool;
-[DBS-ElecNet](https://github.com/srikash/DBS-ElecNet) depends on it for its
+Give SALINE a raw clinical T1-weighted MR image and it handles the rest: resampling, 
+skull-stripping (SynthStrip), bias correction (N4), and segmentation (SynthSeg) 
+all run via Docker, with no other install needed. It runs as a fully standalone CLI tool.
+
+It is the core of [DBS-ElecNet](https://github.com/BRAIN-TO/DBS-ElecNet)'s 
 classical (non-deep-learning) segmentation pipeline.
 
 ## Why SALINE?
