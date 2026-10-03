@@ -7,6 +7,14 @@ from .segment import segment
 
 console = Console()
 
+CITATION = (
+    'V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS '
+    'Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical '
+    'Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, '
+    'doi:10.1109/ISBI61048.2026.11515562'
+)
+CITATION_NOTICE = f"If you use this in your work, please cite {CITATION}"
+
 
 class DefaultGroup(click.Group):
     """A click.Group where an unrecognized/absent subcommand falls back to one
@@ -76,19 +84,21 @@ def _run(num_regions, input_path, br_mask, synthseg, laplacian_threshold,
 
     if result is None:
         console.print(f"[red]✗[/red] no candidates found for [cyan]{nname}[/cyan], skipping")
+        console.print(f"\n[dim]{CITATION_NOTICE}[/dim]")
         return
 
     nifti = nib.Nifti1Image(result, img.affine, img.header)
     nib.save(nifti, f"{save_folder}/{nname}_saline_elec.nii.gz")
     console.print(f"[green]✓ SALINE done[/green] — [cyan]{nname}[/cyan]")
+    console.print(f"\n[dim]{CITATION_NOTICE}[/dim]")
 
 
-@click.group(cls=DefaultGroup, default_command='dual')
+@click.group(cls=DefaultGroup, default_command='dual', epilog=CITATION_NOTICE)
 def cli():
     """Segmenting the electrode(s) with SALINE."""
 
 
-@cli.command()
+@cli.command(epilog=CITATION_NOTICE)
 @_common_options
 def dual(input_path, br_mask, synthseg, laplacian_threshold, frangi_threshold,
           lower_frangi_threshold, expand_radius, save_intermediate):
@@ -97,7 +107,7 @@ def dual(input_path, br_mask, synthseg, laplacian_threshold, frangi_threshold,
          lower_frangi_threshold, expand_radius, save_intermediate)
 
 
-@cli.command()
+@cli.command(epilog=CITATION_NOTICE)
 @_common_options
 def single(input_path, br_mask, synthseg, laplacian_threshold, frangi_threshold,
             lower_frangi_threshold, expand_radius, save_intermediate):
