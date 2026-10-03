@@ -10,21 +10,17 @@ depends on it for its classical (non-deep-learning) segmentation pipeline.
 
 ## Why SALINE?
 
-Expert-annotated DBS electrode segmentations are scarce and expensive. Manual
-segmentation takes 3-5 minutes per scan, and there's basically no specialized
-DBS MRI dataset with ground truth to start from. SALINE sidesteps that: it
-segments a scan in about 1.5 minutes with no manual input, so you can run it
-over an entire cohort instead of hand-labeling a few dozen scans.
+SALINE is a classical, filtering-based automatic segmentation method for DBS
+electrodes: no training, no manual annotation, no GPU. Give it an MRI, a brain
+mask, and a SynthSeg segmentation, and it finds the electrode track with a
+Laplacian/Frangi filter cascade and a line fit.
 
-That's literally how it was used in the DBS-ElecNet paper. SALINE ran over
-280 post-operative MRI scans, and 258 of the resulting masks (211 train, 7
-validation, 40 test) became DBS-ElecNet's training data, no manual annotation
-anywhere in the pipeline. DBS-ElecNet ends up beating SALINE on exactly the
-cases where the filter-based approach struggles: low-contrast regions near
-the ventricles, bilateral electrodes that are hard to separate depending on
-head orientation. Those are roughly the 22 scans that got excluded from
-training. SALINE's job is to bootstrap the training set, not to nail every
-scan on its own.
+That makes it well suited to building a large database of electrode
+segmentations, at scale, without a human labeling each scan by hand. In the
+DBS-ElecNet paper, SALINE segmented 280 post-operative MRI scans in about 1.5
+minutes each, and those segmentations became the training data for
+DBS-ElecNet's 3D U-Net. Any similar segmentation model can be trained the
+same way: run SALINE over a cohort, use its output as ground truth.
 
 ## Install
 
