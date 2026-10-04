@@ -9,6 +9,8 @@ back. It runs as a fully standalone CLI tool.
 It is the core of [DBS-ElecNet](https://github.com/BRAIN-TO/DBS-ElecNet)'s 
 classical (non-deep-learning) segmentation pipeline.
 
+![SALINE usage: a raw MRI goes into the saline CLI, which returns the final mask, the resampled MRI, and the mask in 1mm-isotropic space](fig/SALINE.png)
+
 ## Table of Contents
 
 - [Why SALINE?](#why-saline)
