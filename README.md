@@ -17,6 +17,7 @@ classical (non-deep-learning) segmentation pipeline.
 - [Install](#install)
 - [Usage](#usage)
 - [Citation](#citation)
+- [Contributors](#contributors)
 
 ## Why SALINE?
 
@@ -115,3 +116,7 @@ See [Install](#install) for what that needs and how to run without Docker.
 
 If you use this in your work, please cite the paper above (see [`CITATION.cff`](CITATION.cff)
 for the full machine-readable record).
+
+## Contributors
+
+[Vanessa H. Yu](https://github.com/ttyhhu) and [Sriranga Kashyap](https://github.com/srikash)
