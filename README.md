@@ -1,6 +1,8 @@
 # SALINE (part of DBS-ElecNet)
 ## <b><ins>S</ins></b>egmentation <b><ins>A</ins></b>lgorithm using <b><ins>LIN</ins></b>e-fitting for <b><ins>E</ins></b>lectrodes
 
+[![Version](https://img.shields.io/badge/version-0.3.0-purple.svg)](https://github.com/srikash/SALINE/releases/tag/v0.3.0) [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE) [![Release](https://github.com/srikash/SALINE/actions/workflows/release.yml/badge.svg)](https://github.com/srikash/SALINE/actions/workflows/release.yml) [![PyPI](https://img.shields.io/pypi/v/saline-dbs.svg)](https://pypi.org/project/saline-dbs/)
+
 *V. H. Yu et al., "DBS-ElecNet: Automated Localization and Segmentation of DBS Electrodes in Clinical MRI," 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), London, United Kingdom, 2026, pp. 1-4, doi:[10.1109/ISBI61048.2026.11515562](https://doi.org/10.1109/ISBI61048.2026.11515562)*
 
 Give SALINE a raw clinical T1-weighted MR image and get a segmentation
